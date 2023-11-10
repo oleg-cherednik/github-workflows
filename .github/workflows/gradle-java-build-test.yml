@@ -1,4 +1,4 @@
-name: Build and run test under Java
+name: Build and run tests under Java using Gradle
 on:
   workflow_call:
     inputs:
@@ -8,7 +8,7 @@ on:
         required: true
 
 jobs:
-  build:
+  build-and-tests:
     runs-on: ubuntu-latest
     permissions:
       contents: read
