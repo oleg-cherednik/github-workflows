@@ -36,6 +36,9 @@ jobs:
       - name: Send test coverage report Codacy
         if: ${{ inputs.codacy-report }}
         uses: oleg-cherednik/github-workflows/.github/actions/codacy-coverage-reporter@main
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+
 #      - name: Build test coverage report
 #        if: ${{ inputs.codacy-report }}
 #        run: ./gradlew jacocoTestReport
