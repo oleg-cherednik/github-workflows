@@ -1,5 +1,5 @@
-name: 'Docker Build & Push'
-description: 'Build and push a docker container image to container registry'
+name: 'Send test coverage report to Codacy'
+description: ''
 inputs:
   project-token:
     required: true
