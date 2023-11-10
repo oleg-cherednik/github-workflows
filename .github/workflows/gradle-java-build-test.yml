@@ -33,12 +33,15 @@ jobs:
         run: ./gradlew compileJava --stacktrace
       - name: Run tests
         run: ./gradlew test
-      - name: Build test coverage report
-        if: ${{ inputs.codacy-report }}
-        run: ./gradlew jacocoTestReport
       - name: Send test coverage report Codacy
         if: ${{ inputs.codacy-report }}
-        uses: codacy/codacy-coverage-reporter-action@v1
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: build/reports/jacoco/test/jacocoTestReport.xml
+        uses: oleg-cherednik/github-workflows/.github/actions/codacy-coverage-reporter/acton.yml@main
+#      - name: Build test coverage report
+#        if: ${{ inputs.codacy-report }}
+#        run: ./gradlew jacocoTestReport
+#      - name: Send test coverage report Codacy
+#        if: ${{ inputs.codacy-report }}
+#        uses: codacy/codacy-coverage-reporter-action@v1
+#        with:
+#          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+#          coverage-reports: build/reports/jacoco/test/jacocoTestReport.xml
