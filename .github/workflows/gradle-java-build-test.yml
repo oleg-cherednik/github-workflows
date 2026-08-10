@@ -43,6 +43,18 @@ jobs:
         run: ./gradlew compileJava --stacktrace -Ptest.java.version=${{ inputs.java-version }}
       - name: Run tests
         run: ./gradlew test -Ptest.java.version=${{ inputs.java-version }}
+      # the HTML report carries the full assertion messages, the XML results carry
+      # the stack traces; both are only useful when something actually failed
+      - name: Upload test report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report-java-${{ inputs.java-version }}
+          path: |
+            build/reports/tests/test
+            build/test-results/test
+          retention-days: 7
+          if-no-files-found: ignore
       - name: Send test coverage report to Codacy
         if: ${{ inputs.codacy-report }}
         uses: oleg-cherednik/github-workflows/.github/actions/codacy-coverage-reporter@main
