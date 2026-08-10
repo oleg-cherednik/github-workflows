@@ -3,9 +3,15 @@ on:
   workflow_call:
     inputs:
       java-version:
-        description: 'Version of Java to run builds on'
+        description: 'Version of Java to compile against and run tests on'
         type: string
         required: true
+      gradle-java-version:
+        description: 'Version of Java that runs Gradle itself (defaults to java-version).
+                      Set this when a build plugin requires a newer JDK than java-version.'
+        type: string
+        required: false
+        default: ''
       codacy-report:
         description: 'Send or not test coverage report to Codacy'
         type: boolean
@@ -23,16 +29,20 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+      # the last version in the list becomes JAVA_HOME, i.e. the JDK that runs Gradle;
+      # every installed version is also exposed as JAVA_HOME_<version>_X64 for toolchains
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          java-version: ${{ inputs.java-version }}
+          java-version: |
+            ${{ inputs.java-version }}
+            ${{ inputs.gradle-java-version || inputs.java-version }}
           distribution: 'corretto'
           cache: 'gradle'
       - name: Run a build
-        run: ./gradlew compileJava --stacktrace
+        run: ./gradlew compileJava --stacktrace -Ptest.java.version=${{ inputs.java-version }}
       - name: Run tests
-        run: ./gradlew test
+        run: ./gradlew test -Ptest.java.version=${{ inputs.java-version }}
       - name: Send test coverage report to Codacy
         if: ${{ inputs.codacy-report }}
         uses: oleg-cherednik/github-workflows/.github/actions/codacy-coverage-reporter@main
