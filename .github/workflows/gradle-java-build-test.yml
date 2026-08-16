@@ -3,9 +3,14 @@ on:
   workflow_call:
     inputs:
       java-version:
-        description: 'Version of Java to compile against and run tests on'
+        description: 'Version of Java to compile'
         type: string
         required: true
+      test-java-version:
+        description: 'Version of Java to run tests'
+        type: string
+        required: false
+        default: ''
       gradle-java-version:
         description: 'Version of Java that runs Gradle itself (defaults to java-version).
                       Set this when a build plugin requires a newer JDK than java-version.'
@@ -42,7 +47,7 @@ jobs:
       - name: Run a build
         run: ./gradlew compileJava --stacktrace -Ptest.java.version=${{ inputs.java-version }}
       - name: Run tests
-        run: ./gradlew test -Ptest.java.version=${{ inputs.java-version }}
+        run: ./gradlew test -Ptest.java.version=${{ inputs.test-java-version }}
       # the HTML report carries the full assertion messages, the XML results carry
       # the stack traces; both are only useful when something actually failed
       - name: Upload test report
