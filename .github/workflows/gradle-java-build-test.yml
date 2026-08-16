@@ -48,7 +48,7 @@ jobs:
       - name: Run a build
         run: ./gradlew compileJava --stacktrace -Ptest.java.version=${{ inputs.java-version }}
       - name: Run tests
-        run: ./gradlew test -Ptest.java.version=${{ inputs.test-java-version }}
+        run: ./gradlew test -Ptest.java.version=${{ inputs.test-java-version || 25 }}
       # the HTML report carries the full assertion messages, the XML results carry
       # the stack traces; both are only useful when something actually failed
       - name: Upload test report
