@@ -41,6 +41,7 @@ jobs:
         with:
           java-version: |
             ${{ inputs.java-version }}
+            ${{ inputs.test-java-version || inputs.java-version }}
             ${{ inputs.gradle-java-version || inputs.java-version }}
           distribution: 'corretto'
           cache: 'gradle'
